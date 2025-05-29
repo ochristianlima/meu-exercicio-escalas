@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercício de Escalas Maiores (Naturais)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .note-input {
+            width: 3.5rem; 
+            padding: 0.5rem 0.25rem; 
+            text-align: center;
+            border-radius: 0.375rem; /* rounded-md */
+            border-width: 1px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        @media (min-width: 640px) { /* sm breakpoint */
+            .note-input {
+                width: 4rem;
+            }
+        }
+         @media (min-width: 1024px) { /* lg breakpoint */
+            .note-input {
+                width: 4.5rem;
+            }
+        }
+        .input-correct {
+            border-color: #10B981; /* green-500 */
+            background-color: #D1FAE5; /* green-50 */
+        }
+        .input-incorrect {
+            border-color: #EF4444; /* red-500 */
+            background-color: #FEE2E2; /* red-50 */
+        }
+        .input-empty {
+            border-color: #F59E0B; /* yellow-500 */
+            background-color: #FEF3C7; /* yellow-50 */
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        th, td {
+            padding-left: 0.2rem; 
+            padding-right: 0.2rem;
+            font-size: 0.8rem; 
+        }
+        .interval-header th {
+            font-weight: normal;
+            font-style: italic;
+            color: #4A5568; /* gray-700 */
+        }
+        .explain-scale-btn {
+            background-color: transparent;
+            border: none;
+            color: #3B82F6; /* blue-500 */
+            cursor: pointer;
+            padding: 0.1rem 0.2rem;
+            margin-left: 0.25rem;
+            font-size: 0.9rem;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .explain-scale-btn:hover {
+            color: #2563EB; /* blue-600 */
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            th, td {
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+                font-size: 0.875rem; /* sm */
+            }
+        }
+         @media (min-width: 1024px) { /* lg breakpoint */
+            th, td {
+                padding-left: 0.75rem; 
+                padding-right: 0.75rem;
+                 font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-2 sm:p-4 lg:p-6 min-h-screen flex flex-col">
+        <header class="text-center mb-4 sm:mb-6">
+            <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-600">Exercício de Escalas Maiores</h1>
+            <p class="text-gray-700 mt-1 text-xs sm:text-sm">
+                Preencha as notas que faltam nas escalas maiores abaixo.
+                Use '#' para sustenido (ex: F#) e 'b' para bemol (ex: Bb).
+                As notas devem ser inseridas com a primeira letra maiúscula (ex: C, D#, Ab).
+            </p>
+        </header>
+
+        <main class="flex-grow">
+            <div class="bg-white shadow-xl rounded-lg p-2 sm:p-4 overflow-x-auto">
+                <div class="mb-3 text-center">
+                    <p class="text-gray-600 text-xs sm:text-sm font-semibold">Escala Cromática de Referência:</p>
+                    <p class="text-blue-600 text-xs sm:text-sm">C - C# - D - D# - E - F - F# - G - G# - A - A# - B</p>
+                </div>
+                <table class="min-w-full w-full text-left">
+                    <thead>
+                        <tr class="border-b-2 border-gray-300">
+                            <th class="py-2 font-semibold text-gray-700">Escala</th>
+                            <th class="py-2 font-semibold text-gray-700 text-center">1ª</th>
+                            <th class="py-2 font-semibold text-gray-700 text-center">2ª</th>
+                            <th class="py-2 font-semibold text-gray-700 text-center">3ª</th>
+                            <th class="py-2 font-semibold text-gray-700 text-center">4ª</th>
+                            <th class="py-2 font-semibold text-gray-700 text-center">5ª</th>
+                            <th class="py-2 font-semibold text-gray-700 text-center">6ª</th>
+                            <th class="py-2 font-semibold text-gray-700 text-center">7ª</th>
+                            <th class="py-2 font-semibold text-gray-700 text-center">8ª</th>
+                        </tr>
+                        <tr class="border-b border-gray-200 interval-header">
+                            <th class="py-1 text-center"></th> 
+                            <th class="py-1 text-center">Tônica</th> 
+                            <th class="py-1 text-center">Tom</th> 
+                            <th class="py-1 text-center">Tom</th> 
+                            <th class="py-1 text-center">Semitom</th> 
+                            <th class="py-1 text-center">Tom</th> 
+                            <th class="py-1 text-center">Tom</th> 
+                            <th class="py-1 text-center">Tom</th> 
+                            <th class="py-1 text-center">Semitom</th> 
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="py-2 font-medium">
+                                Dó Maior
+                                <button class="explain-scale-btn" data-scale-name="Dó Maior" title="✨ Explicar Escala de Dó Maior">ℹ️</button>
+                            </td>
+                            <td class="py-2 text-center">C</td>
+                            <td class="py-2 text-center"><input type="text" id="c_major_2nd" data-scale="Dó Maior" data-degree="2ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center"><input type="text" id="c_major_3rd" data-scale="Dó Maior" data-degree="3ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">F</td>
+                            <td class="py-2 text-center"><input type="text" id="c_major_5th" data-scale="Dó Maior" data-degree="5ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">A</td>
+                            <td class="py-2 text-center"><input type="text" id="c_major_7th" data-scale="Dó Maior" data-degree="7ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">C</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-medium">
+                                Ré Maior
+                                <button class="explain-scale-btn" data-scale-name="Ré Maior" title="✨ Explicar Escala de Ré Maior">ℹ️</button>
+                            </td>
+                            <td class="py-2 text-center">D</td>
+                            <td class="py-2 text-center">E</td>
+                            <td class="py-2 text-center"><input type="text" id="d_major_3rd" data-scale="Ré Maior" data-degree="3ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">G</td>
+                            <td class="py-2 text-center"><input type="text" id="d_major_5th" data-scale="Ré Maior" data-degree="5ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">B</td>
+                            <td class="py-2 text-center"><input type="text" id="d_major_7th" data-scale="Ré Maior" data-degree="7ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">D</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-medium">
+                                Mi Maior
+                                <button class="explain-scale-btn" data-scale-name="Mi Maior" title="✨ Explicar Escala de Mi Maior">ℹ️</button>
+                            </td>
+                            <td class="py-2 text-center">E</td>
+                            <td class="py-2 text-center"><input type="text" id="e_major_2nd" data-scale="Mi Maior" data-degree="2ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center"><input type="text" id="e_major_3rd" data-scale="Mi Maior" data-degree="3ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">A</td>
+                            <td class="py-2 text-center"><input type="text" id="e_major_5th" data-scale="Mi Maior" data-degree="5ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">C#</td>
+                            <td class="py-2 text-center"><input type="text" id="e_major_7th" data-scale="Mi Maior" data-degree="7ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">E</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-medium">
+                                Fá Maior
+                                <button class="explain-scale-btn" data-scale-name="Fá Maior" title="✨ Explicar Escala de Fá Maior">ℹ️</button>
+                            </td>
+                            <td class="py-2 text-center">F</td>
+                            <td class="py-2 text-center"><input type="text" id="f_major_2nd" data-scale="Fá Maior" data-degree="2ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">A</td>
+                            <td class="py-2 text-center"><input type="text" id="f_major_4th" data-scale="Fá Maior" data-degree="4ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">C</td>
+                            <td class="py-2 text-center"><input type="text" id="f_major_6th" data-scale="Fá Maior" data-degree="6ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center"><input type="text" id="f_major_7th" data-scale="Fá Maior" data-degree="7ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">F</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-medium">
+                                Sol Maior
+                                <button class="explain-scale-btn" data-scale-name="Sol Maior" title="✨ Explicar Escala de Sol Maior">ℹ️</button>
+                            </td>
+                            <td class="py-2 text-center">G</td>
+                            <td class="py-2 text-center"><input type="text" id="g_major_2nd" data-scale="Sol Maior" data-degree="2ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">B</td>
+                            <td class="py-2 text-center"><input type="text" id="g_major_4th" data-scale="Sol Maior" data-degree="4ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">D</td>
+                            <td class="py-2 text-center"><input type="text" id="g_major_6th" data-scale="Sol Maior" data-degree="6ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center"><input type="text" id="g_major_7th" data-scale="Sol Maior" data-degree="7ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">G</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-medium">
+                                Lá Maior
+                                <button class="explain-scale-btn" data-scale-name="Lá Maior" title="✨ Explicar Escala de Lá Maior">ℹ️</button>
+                            </td>
+                            <td class="py-2 text-center">A</td>
+                            <td class="py-2 text-center"><input type="text" id="a_major_2nd" data-scale="Lá Maior" data-degree="2ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">C#</td>
+                            <td class="py-2 text-center"><input type="text" id="a_major_4th" data-scale="Lá Maior" data-degree="4ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">E</td>
+                            <td class="py-2 text-center"><input type="text" id="a_major_6th" data-scale="Lá Maior" data-degree="6ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center"><input type="text" id="a_major_7th" data-scale="Lá Maior" data-degree="7ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">A</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-medium">
+                                Si Maior
+                                <button class="explain-scale-btn" data-scale-name="Si Maior" title="✨ Explicar Escala de Si Maior">ℹ️</button>
+                            </td>
+                            <td class="py-2 text-center">B</td>
+                            <td class="py-2 text-center"><input type="text" id="b_major_2nd" data-scale="Si Maior" data-degree="2ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">D#</td>
+                            <td class="py-2 text-center"><input type="text" id="b_major_4th" data-scale="Si Maior" data-degree="4ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">F#</td>
+                            <td class="py-2 text-center"><input type="text" id="b_major_6th" data-scale="Si Maior" data-degree="6ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center"><input type="text" id="b_major_7th" data-scale="Si Maior" data-degree="7ª nota" class="note-input border-gray-300 focus:ring-blue-500 focus:border-blue-500"></td>
+                            <td class="py-2 text-center">B</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="scaleExplanationArea" class="mt-4 p-3 bg-indigo-50 shadow-lg rounded-lg hidden">
+                <h3 id="scaleExplanationTitle" class="text-md sm:text-lg font-semibold mb-2 text-indigo-700"></h3>
+                <div id="scaleExplanationLoading" class="hidden text-center py-3">
+                    <div class="loader"></div>
+                    <p class="text-xs text-gray-600 mt-1">Buscando informações sobre a escala...</p>
+                </div>
+                <div id="scaleExplanationContent" class="text-xs sm:text-sm prose max-w-none"></div>
+                <p id="scaleExplanationError" class="text-red-500 text-xs hidden"></p>
+            </div>
+
+            <div class="mt-4 sm:mt-6 text-center space-y-2 sm:space-y-0 sm:space-x-2">
+                <button id="checkButton" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                    Verificar Respostas
+                </button>
+                <button id="clearButton" class="w-full sm:w-auto bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                    Limpar Campos
+                </button>
+                <button id="getAiTipsButton" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 hidden">
+                    ✨ Obter Dicas com IA
+                </button>
+            </div>
+
+            <div id="resultsArea" class="mt-4 p-3 bg-white shadow-lg rounded-lg hidden">
+                <h3 id="resultsTitle" class="text-md sm:text-lg font-semibold mb-2"></h3>
+                <ul id="errorList" class="list-disc list-inside space-y-1 text-xs sm:text-sm"></ul>
+            </div>
+
+            <div id="aiTipsArea" class="mt-4 p-3 bg-white shadow-lg rounded-lg hidden">
+                <h3 class="text-md sm:text-lg font-semibold mb-2 text-purple-700">Dicas da IA para Melhorar</h3>
+                <div id="aiTipsLoading" class="hidden text-center py-3">
+                    <div class="loader"></div>
+                    <p class="text-xs text-gray-600 mt-1">Gerando dicas personalizadas...</p>
+                </div>
+                <div id="aiTipsContent" class="text-xs sm:text-sm prose max-w-none"></div>
+                <p id="aiTipsError" class="text-red-500 text-xs hidden"></p>
+            </div>
+        </main>
+
+        <footer class="text-center mt-6 sm:mt-8 py-3 text-xs text-gray-500">
+            <p>&copy; <span id="currentYear"></span> Exercícios Musicais Interativos. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Define as respostas corretas
+        const correctAnswers = {
+            // Dó Maior
+            "c_major_2nd": "D", "c_major_3rd": "E", "c_major_5th": "G", "c_major_7th": "B",
+            // Ré Maior
+            "d_major_3rd": "F#", "d_major_5th": "A", "d_major_7th": "C#",
+            // Mi Maior
+            "e_major_2nd": "F#", "e_major_3rd": "G#", "e_major_5th": "B", "e_major_7th": "D#",
+            // Fá Maior
+            "f_major_2nd": "G", "f_major_4th": "Bb", "f_major_6th": "D", "f_major_7th": "E",
+            // Sol Maior
+            "g_major_2nd": "A", "g_major_4th": "C", "g_major_6th": "E", "g_major_7th": "F#",
+            // Lá Maior
+            "a_major_2nd": "B", "a_major_4th": "D", "a_major_6th": "F#", "a_major_7th": "G#",
+            // Si Maior
+            "b_major_2nd": "C#", "b_major_4th": "E", "b_major_6th": "G#", "b_major_7th": "A#"
+        };
+
+        // Elementos do DOM
+        const checkButton = document.getElementById('checkButton');
+        const clearButton = document.getElementById('clearButton');
+        const getAiTipsButton = document.getElementById('getAiTipsButton');
+        const resultsArea = document.getElementById('resultsArea');
+        const resultsTitle = document.getElementById('resultsTitle');
+        const errorList = document.getElementById('errorList');
+        const inputFields = document.querySelectorAll('.note-input');
+        
+        const aiTipsArea = document.getElementById('aiTipsArea');
+        const aiTipsLoading = document.getElementById('aiTipsLoading');
+        const aiTipsContent = document.getElementById('aiTipsContent');
+        const aiTipsError = document.getElementById('aiTipsError');
+
+        const scaleExplanationArea = document.getElementById('scaleExplanationArea');
+        const scaleExplanationTitle = document.getElementById('scaleExplanationTitle');
+        const scaleExplanationLoading = document.getElementById('scaleExplanationLoading');
+        const scaleExplanationContent = document.getElementById('scaleExplanationContent');
+        const scaleExplanationError = document.getElementById('scaleExplanationError');
+        const explainScaleButtons = document.querySelectorAll('.explain-scale-btn');
+
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        let incorrectAnswersForAI = []; 
+
+        function normalizeNote(note) {
+            if (typeof note !== 'string' || note.trim() === '') return '';
+            let n = note.trim();
+            if (n.length > 1 && (n.endsWith('#') || n.endsWith('b'))) {
+                if (n.charAt(0) === n.charAt(0).toUpperCase()) return n;
+                return n.charAt(0).toUpperCase() + n.substring(1);
+            }
+            if (n.length === 1) return n.toUpperCase(); 
+            return n.charAt(0).toUpperCase() + n.substring(1);
+        }
+        
+        checkButton.addEventListener('click', () => {
+            resultsArea.classList.add('hidden');
+            aiTipsArea.classList.add('hidden'); 
+            getAiTipsButton.classList.add('hidden'); 
+            errorList.innerHTML = '';
+            resultsTitle.textContent = '';
+            incorrectAnswersForAI = []; 
+            
+            let allCorrect = true;
+            const errorMessages = [];
+
+            inputFields.forEach(input => {
+                input.classList.remove('input-correct', 'input-incorrect', 'input-empty', 'border-gray-300');
+                input.classList.add('border-gray-300'); 
+
+                const inputId = input.id;
+                const userAnswer = normalizeNote(input.value);
+                if (correctAnswers.hasOwnProperty(inputId)) {
+                    const correctAnswer = normalizeNote(correctAnswers[inputId]); 
+                    const scaleName = input.dataset.scale;
+                    const degreeName = input.dataset.degree;
+
+                    if (userAnswer === '') {
+                        input.classList.add('input-empty');
+                        errorMessages.push(`<strong>${scaleName} - ${degreeName}:</strong> Campo não preenchido.`);
+                        allCorrect = false;
+                        incorrectAnswersForAI.push({ scale: scaleName, degree: degreeName, userAnswer: 'Não preenchido', correctAnswer: correctAnswer });
+                    } else if (userAnswer === correctAnswer) {
+                        input.classList.add('input-correct');
+                    } else {
+                        input.classList.add('input-incorrect');
+                        const errorMessage = `<strong>${scaleName} - ${degreeName}:</strong> Você digitou '<em>${input.value}</em>' (esperado: '<strong>${correctAnswer}</strong>').`;
+                        errorMessages.push(errorMessage);
+                        allCorrect = false;
+                        incorrectAnswersForAI.push({ scale: scaleName, degree: degreeName, userAnswer: input.value, correctAnswer: correctAnswer });
+                    }
+                } else {
+                    console.warn(`Input com ID '${inputId}' não encontrado em correctAnswers.`);
+                }
+            });
+
+            resultsArea.classList.remove('hidden');
+            const totalInputsToCheck = Object.keys(correctAnswers).length;
+            if (totalInputsToCheck === 0) { 
+                 resultsTitle.textContent = 'Nenhum exercício para verificar.';
+                 resultsTitle.className = 'text-md sm:text-lg font-semibold mb-2 text-gray-600';
+                 allCorrect = false; 
+            } else if (allCorrect) {
+                resultsTitle.textContent = 'Parabéns! Todas as respostas estão corretas!';
+                resultsTitle.className = 'text-md sm:text-lg font-semibold mb-2 text-green-600';
+                errorList.innerHTML = ''; 
+                getAiTipsButton.classList.add('hidden'); 
+            } else {
+                resultsTitle.textContent = 'Alguns erros foram encontrados:';
+                resultsTitle.className = 'text-md sm:text-lg font-semibold mb-2 text-red-600';
+                errorMessages.forEach(msg => {
+                    const li = document.createElement('li');
+                    li.innerHTML = msg; 
+                    errorList.appendChild(li);
+                });
+                if (incorrectAnswersForAI.length > 0) { 
+                    getAiTipsButton.classList.remove('hidden'); 
+                }
+            }
+        });
+
+        clearButton.addEventListener('click', () => {
+            inputFields.forEach(input => {
+                input.value = '';
+                input.classList.remove('input-correct', 'input-incorrect', 'input-empty', 'border-gray-300');
+                input.classList.add('border-gray-300');
+            });
+            resultsArea.classList.add('hidden');
+            errorList.innerHTML = '';
+            resultsTitle.textContent = '';
+            aiTipsArea.classList.add('hidden');
+            aiTipsContent.innerHTML = '';
+            aiTipsError.classList.add('hidden');
+            getAiTipsButton.classList.add('hidden');
+            scaleExplanationArea.classList.add('hidden'); // Limpa também a explicação da escala
+            incorrectAnswersForAI = [];
+        });
+
+        getAiTipsButton.addEventListener('click', async () => {
+            if (incorrectAnswersForAI.length === 0) {
+                aiTipsArea.classList.add('hidden');
+                return;
+            }
+
+            aiTipsArea.classList.remove('hidden');
+            aiTipsLoading.classList.remove('hidden');
+            aiTipsContent.innerHTML = '';
+            aiTipsError.classList.add('hidden');
+            aiTipsError.textContent = '';
+
+            let promptText = "Olá! Sou um estudante de música e estou com dificuldades em algumas notas de escalas musicais. Poderia me dar algumas dicas personalizadas para praticar e memorizar os seguintes pontos?\n\n";
+            incorrectAnswersForAI.forEach(err => {
+                promptText += `- Na ${err.scale}, para a ${err.degree}, eu respondi '${err.userAnswer}' mas o correto é '${err.correctAnswer}'.\n`;
+            });
+            promptText += "\nQuais estratégias de estudo, exercícios práticos ou formas de pensar sobre essas notas e escalas poderiam me ajudar a fixá-las melhor? Gostaria de dicas que vão além de simplemente decorar, focando na compreensão dos intervalos e da sonoridade. Responda em português brasileiro.";
+
+            try {
+                let chatHistory = [{ role: "user", parts: [{ text: promptText }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Erro da API Gemini (dicas):", errorData);
+                    throw new Error(`Erro da API (dicas): ${errorData.error?.message || response.statusText}`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    aiTipsContent.innerHTML = text.replace(/\n/g, '<br>');
+                } else {
+                    throw new Error("Resposta da API (dicas) em formato inesperado.");
+                }
+            } catch (error) {
+                console.error("Erro ao buscar dicas da IA:", error);
+                aiTipsError.textContent = `Erro ao buscar dicas da IA: ${error.message}. Tente novamente mais tarde.`;
+                aiTipsError.classList.remove('hidden');
+                aiTipsContent.innerHTML = ''; 
+            } finally {
+                aiTipsLoading.classList.add('hidden');
+            }
+        });
+
+        explainScaleButtons.forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const scaleName = event.currentTarget.dataset.scaleName;
+                if (!scaleName) return;
+
+                scaleExplanationArea.classList.remove('hidden');
+                scaleExplanationTitle.textContent = `✨ Explicando a Escala de ${scaleName}`;
+                scaleExplanationLoading.classList.remove('hidden');
+                scaleExplanationContent.innerHTML = '';
+                scaleExplanationError.classList.add('hidden');
+                scaleExplanationError.textContent = '';
+
+                const promptText = `Por favor, explique detalhadamente a formação da escala de ${scaleName}. Inclua a sequência de tons e semitons, as notas que a compõem, sua armadura de clave (quantos e quais sustenidos ou bemóis), e uma breve dica para ajudar a memorizá-la ou uma curiosidade musical sobre ela. Responda em português brasileiro.`;
+
+                try {
+                    let chatHistory = [{ role: "user", parts: [{ text: promptText }] }];
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; 
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error("Erro da API Gemini (explicação):", errorData);
+                        throw new Error(`Erro da API (explicação): ${errorData.error?.message || response.statusText}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        scaleExplanationContent.innerHTML = text.replace(/\n/g, '<br>');
+                    } else {
+                        throw new Error("Resposta da API (explicação) em formato inesperado.");
+                    }
+
+                } catch (error) {
+                    console.error("Erro ao buscar explicação da escala:", error);
+                    scaleExplanationError.textContent = `Erro ao buscar explicação: ${error.message}. Tente novamente.`;
+                    scaleExplanationError.classList.remove('hidden');
+                    scaleExplanationContent.innerHTML = ''; 
+                } finally {
+                    scaleExplanationLoading.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
